@@ -1,0 +1,50 @@
+# define params:
+
+threshold = 0.4	  #range of 0-1. Represents the boundary for setting a binary congested/
+			#	not congested variable
+
+
+tcells = 1	  #number of cells away in the time axis that can still be a connection
+		#should only help ID bottlenecks if a sensor is accurate only sometimes
+		#ex: if power is lost for X time units, this could help us ID a bottleneck that 
+		# 	includes the section of lost data
+
+
+xcells = 1  	#number of cells away in the position axis that can still be a connection
+		#if a sensor is faulty, it may not report congestion, but the sensors before and after
+		#may still report correct data.
+		#should be used in conjunction with a variable to represent distance between two
+		#   cell, in real distance
+
+
+predist = 0	  #is set to equal the distance between the currently checked station and the 
+    #	  previous station
+
+
+postdist = 0	#is set to equal the distance between the currently checked station and the
+		#	  previous station
+
+--------------------------------------------------------------------------------------------------------------------
+	
+Bottleneck at a single position: check that position for multiple time units showing congestion. Record the start/stop 
+time of the congestion. Potentially check for boundary+tcells in case sensor malfunction reports incorrectly, or if 
+threshold value is right on the edge of congestion level
+
+
+Bottleneck causing backed-up traffic: in this case, we would see several cells in a row in the x direction with congestion. 
+Likely all at same t, but could show a congestion wave with later t for downstream x. Probably a mix of both.
+
+
+Weighting cells by connectedness: What kind of meaningful data might we get by coloring/shading a cell based solely on its 
+connectedness? As we iterate through the array of binary values that tell if a cell is congested or not, we can increment its 
+connectedness to other cells in the t and x direction by checking if its neighboring cells (definitely immediate neighbors, 
+probably diagonals as well, and ideally extend to neighbors of these) are also congested. Cells with the highest values of 
+connectedness should indicate locations/times with the longest queues. If we want show show both x and t connectedness for a
+cell, perhaps we can use color and intensity/brightness. Seeing an array of connectedness data may make a recipe for vizualization
+more intuitive.
+
+
+
+
+
+
